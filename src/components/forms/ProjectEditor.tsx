@@ -7,7 +7,7 @@ import type { Project } from '../../domain'; // Типизируем редак�
 import { Field } from '../ui/Field'; // Подписываем поля формы.
 import { Modal } from '../ui/Modal'; // Открываем доступное модальное окно.
 import { SubmitForm } from './SubmitForm'; // Обрабатываем отправку и ошибки.
-export function ProjectEditor({data, project, close}: { data: Data; project?: Project; close: () => void }) { // Создаём или изменяем собственный объект.
+export function ProjectEditor({data, project, close}: { data: Data; project?: Project; close: () => void }) { // Создаём объект или изменяем объект любого постановщика.
     const [name, setName] = useState(project?.name ?? '');
     const [address, setAddress] = useState(project?.address ?? '');
     const navigate = useNavigate(); // Заполняем исходные значения.

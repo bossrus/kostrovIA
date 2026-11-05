@@ -8,7 +8,7 @@ export function MyTasksPage({data}: { data: Data }) { // Даём исполни
     const [status, setStatus] = useState<Status | ''>('');
     const [search, setSearch] = useState(''); // Храним локальные фильтры.
     const mine = data.tasks.filter(task => task.assignee_id === data.me.id);
-    const tasks = mine.filter(task => (!status || task.status === status) && task.title.toLocaleLowerCase('ru').includes(search.toLocaleLowerCase('ru').trim())); // Не включаем задачи, созданные смешанной ролью для других людей.
+    const tasks = mine.filter(task => (!status || task.status === status) && task.title.toLocaleLowerCase('ru').includes(search.toLocaleLowerCase('ru').trim())); // Фильтруем личные назначения по статусу и названию.
     return <>
         <div className="page-heading">
             <div><p className="eyebrow">ЛИЧНАЯ РАБОТА</p><h1>Мои задачи<span

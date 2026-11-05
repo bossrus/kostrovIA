@@ -14,6 +14,7 @@ export function useData(userId: string) { // Создаём отдельное �
       results.forEach(result => fail(result.error)); // Не подменяем отказ доступа пустым списком.
       const people = results[0].data as Profile[]; const me = people.find(person => person.id === userId); // Находим защищённый профиль текущего пользователя.
       if (!me) throw new Error('Администратор ещё не назначил вам роль. Добавьте профиль в Supabase.'); // Auth-аккаунт без профиля ничего не открывает.
+      if (people.some(person => person.is_manager === person.is_executor)) throw new Error('Роли настроены неверно. Примените миграцию взаимоисключающих ролей в Supabase.'); // Не открываем рабочее пространство со старой моделью ролей.
       if (current === request.current) setData({ me, people, projects: results[1].data as Project[], tasks: results[2].data as Task[], history: results[3].data as History[] }); // Игнорируем ответ старого запроса.
     } catch (reason) { // Сохраняем доступное для пользователя описание ошибки.
       if (current === request.current) setError(reason instanceof Error ? reason.message : 'Не удалось загрузить данные'); // Не показываем устаревшую ошибку.

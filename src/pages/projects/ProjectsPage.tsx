@@ -5,7 +5,7 @@ import { ArrowUpRight, Building2, MapPin, Plus, Search, Clock3, CheckCircle2 } f
 import type { Data } from '../../hooks/useWorkspaceData'; // Получаем только разрешённый снимок.
 import { Empty } from '../../components/ui/Empty'; // Отображаем отсутствие объектов.
 import { ProjectEditor } from '../../components/forms/ProjectEditor'; // Открываем создание стройки.
-export function ProjectsPage({data}: { data: Data }) { // Показываем собственные стройки и объекты с назначенными задачами.
+export function ProjectsPage({data}: { data: Data }) { // Постановщикам показываем все стройки, исполнителям — объекты их назначений.
     const [search, setSearch] = useState('');
     const [create, setCreate] = useState(false); // Управляем поиском и формой создания.
     const query = search.toLocaleLowerCase('ru').trim();
@@ -35,6 +35,7 @@ export function ProjectsPage({data}: { data: Data }) { // Показываем �
         {projects.length ? <div className="project-grid">{projects.map((project, index) => {
             const tasks = data.tasks.filter(task => task.project_id === project.id);
             const accepted = tasks.filter(task => task.status === 'accepted').length;
+            const ownerName = data.people.find(person => person.id === project.owner_id)?.display_name ?? 'Не указан'; // Показываем имя постановщика у каждого объекта.
             return <Link to={`/projects/${project.id}`} className="project-card" key={project.id}>
                 <div className="project-card-top"><span className="project-icon"><Building2 size={24}/></span><span
                     className="object-index">ОБЪЕКТ {String(index + 1).padStart(2, '0')}</span><ArrowUpRight size={20}/>
@@ -46,7 +47,7 @@ export function ProjectsPage({data}: { data: Data }) { // Показываем �
                               max={tasks.length || 1}/>
                 </div>
                 <div className="project-card-bottom">
-                    <span>{project.owner_id === data.me.id ? 'Мой объект' : 'Назначен как исполнитель'}</span><span>{tasks.length} задач</span>
+                    <span className="project-owner">Постановщик<strong>{ownerName}</strong></span><span>{tasks.length} задач</span>
                 </div>
             </Link>;
         })}</div> : <Empty title={query ? 'Ничего не найдено' : 'Пока нет объектов'}

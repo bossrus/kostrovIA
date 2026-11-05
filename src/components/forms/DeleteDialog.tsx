@@ -1,7 +1,7 @@
 // Файл содержит отдельный компонент DeleteDialog; сервер повторно проверяет каждую операцию.
 import { useNavigate } from 'react-router-dom'; // Возвращаемся к родительскому списку.
 import type { Data } from '../../hooks/useWorkspaceData'; // Обновляем видимые записи после удаления.
-import { rpc } from '../../lib/api'; // Удаляем через серверную проверку владельца.
+import { rpc } from '../../lib/api'; // Удаляем через серверную проверку роли постановщика.
 import type { Project, Task } from '../../domain'; // Типизируем удаляемую запись.
 import { Modal } from '../ui/Modal'; // Показываем подтверждение.
 import { SubmitForm } from './SubmitForm'; // Показываем ошибку запрета удаления.

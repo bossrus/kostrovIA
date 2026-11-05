@@ -6,7 +6,7 @@ import type { Data } from '../../hooks/useWorkspaceData'; // Получаем р
 import { actions, date, statuses, type Status } from '../../domain'; // Используем подписи и допустимые кнопки.
 import { NotAvailable } from '../../components/feedback/NotAvailable'; // Показываем безопасное отсутствие записи.
 import { Badge } from '../../components/ui/Badge'; // Отображаем текущий статус.
-import { TaskEditor } from '../../components/forms/TaskEditor'; // Редактируем новую задачу.
+import { TaskEditor } from '../../components/forms/TaskEditor'; // Редактируем задачу в любом статусе.
 import { Transition } from '../../components/forms/Transition'; // Подтверждаем смену статуса.
 import { DeleteDialog } from '../../components/forms/DeleteDialog'; // Подтверждаем удаление задачи.
 export function TaskPage({data}: { data: Data }) { // Показываем содержание, разрешённые переходы и неизменяемую историю.
@@ -17,15 +17,15 @@ export function TaskPage({data}: { data: Data }) { // Показываем со�
     const task = data.tasks.find(item => item.id === id);
     if (!task) return <NotAvailable/>; // Чужой UUID не даёт доступа к карточке.
     const project = data.projects.find(item => item.id === task.project_id);
-    const owner = data.me.is_manager && task.author_id === data.me.id;
+    const canManage = data.me.is_manager;
     const history = data.history.filter(event => event.task_id === task.id); // Выбираем только историю открытой задачи.
     const name = (userId: string) => data.people.find(person => person.id === userId)?.display_name ?? 'Пользователь'; // Безопасно отображаем доступные имена.
     return <><Link className="back" to={`/projects/${task.project_id}`}><ArrowLeft
         size={16}/>{project?.name ?? 'К объекту'}</Link>
         <div className="page-heading">
             <div><p className="eyebrow">КАРТОЧКА ЗАДАЧИ</p><h1>{task.title}</h1></div>
-            {owner && <div className="toolbar">{task.status === 'new' &&
-                <button className="button secondary" onClick={() => setEdit(true)}><Pencil size={16}/>Изменить</button>}
+            {canManage && <div className="toolbar">
+                <button className="button secondary" onClick={() => setEdit(true)}><Pencil size={16}/>Изменить</button>
                 <button className="icon-button delete" aria-label="Удалить задачу" onClick={() => setRemove(true)}>
                     <Trash2 size={18}/></button>
             </div>}</div>

@@ -12,7 +12,7 @@ export function TaskEditor({data, projectId, task, close}: {
     projectId: string;
     task?: Task;
     close: () => void
-}) { // Редактируем новую задачу без переноса в другой объект.
+}) { // Редактируем задачу в любом статусе без переноса в другой объект.
     const executors = data.people.filter(person => person.is_executor);
     const navigate = useNavigate(); // Показываем только пользователей с ролью исполнителя.
     const [title, setTitle] = useState(task?.title ?? '');
@@ -30,7 +30,7 @@ export function TaskEditor({data, projectId, task, close}: {
         await data.reload();
         close();
         navigate(`/tasks/${id}`);
-    } // Версия предотвращает изменение уже взятой в работу задачи.
+    } // Версия предотвращает потерю параллельных изменений задачи.
     return <Modal title={task ? 'Редактировать задачу' : 'Новая задача'} close={close}><SubmitForm submit={save}><Field
         label="Название задачи"><input autoFocus required maxLength={200} value={title}
                                        onChange={event => setTitle(event.target.value)}
@@ -41,5 +41,5 @@ export function TaskEditor({data, projectId, task, close}: {
         <option value="" disabled>Выберите исполнителя</option>
         {executors.map(person => <option key={person.id} value={person.id}>{person.display_name}</option>)}
     </select></Field>{!executors.length && <p className="error">Сначала добавьте исполнителей в Supabase.</p>}<p
-        className="hint">Объект закреплён за задачей. Изменять данные можно до начала работы.</p></SubmitForm></Modal>; // Не предлагаем изменение автора, даты и статуса.
+        className="hint">Постановщик может изменять данные и исполнителя в любом статусе, включая «Принята». Статус при сохранении не меняется. Объект закреплён за задачей.</p></SubmitForm></Modal>; // Не предлагаем изменение автора, даты и статуса.
 } // Завершаем редактор задачи.
