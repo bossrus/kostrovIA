@@ -1,0 +1,17 @@
+{
+  // Файл задаёт строгую проверку типов приложения без генерации JavaScript.
+  "compilerOptions": {
+    "target": "ES2022", // Поддерживаем современные браузеры.
+    "lib": ["ES2022", "DOM", "DOM.Iterable"], // Описываем доступные API.
+    "module": "ESNext", // Оставляем обработку модулей Vite.
+    "moduleResolution": "Bundler", // Разрешаем импорты как сборщик.
+    "jsx": "react-jsx", // Используем автоматический JSX runtime.
+    "strict": true, // Проверяем nullable-значения и типы функций.
+    "skipLibCheck": true, // Не проверяем внутренние типы зависимостей.
+    "noEmit": true, // Сборкой занимается Vite.
+    "esModuleInterop": true, // Поддерживаем совместимость модулей.
+    "resolveJsonModule": true, // Разрешаем импорт JSON.
+    "types": ["vite/client", "node"] // Подключаем типы окружения.
+  },
+  "include": ["src", "vite.config.ts"] // Проверяем приложение и конфигурацию.
+}
